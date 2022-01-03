@@ -1,0 +1,64 @@
+---
+
+# A tic-tac-toe text-console game implemented in Ansible.
+# Idea and implementation: Maxim B. Belooussov
+
+- name: Starting a new game
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    - A0: " "
+    - A1: " "
+    - A2: " "
+    - B0: " "
+    - B1: " "
+    - B2: " "
+    - C0: " "
+    - C1: " "
+    - C2: " "
+    - user_win_condition: ( A0 == "x" AND A1 == "x" AND A2 == "x" ) OR ( B0 == "x" AND B1 == "x" AND B2 == "x" ) OR ( C0 == "x" AND C1 == "x" AND C2 == "x" )
+    - computer_win_condition: ( A0 == "o" AND A1 == "o" AND A2 == "o" ) OR ( B0 == "o" AND B1 == "o" AND B2 == "o" ) OR ( C0 == "o" AND C1 == "o" AND C2 == "o" )
+
+  tasks:
+    - name: Draw an empty board
+      debug:
+        msg:
+          - "┌---┬---┬---┬---┐"
+          - "| X | 0 | 1 | 2 |"
+          - "├---┼---┼---┼---┤"
+          - "| A | {{ A0 }} | {{ A1 }} | {{ A2 }} |"
+          - "├---┼---┼---┼---┤"
+          - "| B | {{ B0 }} | {{ B1 }} | {{ B2 }} |"
+          - "├---┼---┼---┼---┤"
+          - "| C | {{ C0 }} | {{ C1 }} | {{ C2 }} |"
+          - "└---┴---┴---┴---┘"
+
+    # there can be only up to 9 moves, so just code them all
+
+    - name: Ask user for a move
+      debug:
+        msg: "Make your move (e.g. B1): "
+
+#    - name: Evaluate user input for correctness
+#
+#    - name: Print the board after user input
+#
+#    - name: Check if user has won
+#
+#    - name: If we lost - congratulate the user and fail
+#      fail:
+#        msg: "Congratulations, you have won!"
+#      when: "{{ user_win_condition }}"
+#
+#    - name: Fail if user has won
+#
+#    - name: Make our move
+#
+#    - name: Print the board after our move
+#
+#    - name: Check if we have won
+#
+#    - name: If we won - wish the user better luck next and quit
+#        msg: "Better luck next time!"
+#      when: "{{ computer_win_condition }}"
