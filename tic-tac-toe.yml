@@ -28,40 +28,30 @@
       - "{{ C1 }}"
       - "{{ C2 }}"
     empty_fields: "{{ board_array | reject('search', ' ') | list }}"
-#    user_win_condition: ## all 8 possible combinations
-#      ( A0 == "x" AND A1 == "x" AND A2 == "x" ) OR \
-#      ( B0 == "x" AND B1 == "x" AND B2 == "x" ) OR \
-#      ( C0 == "x" AND C1 == "x" AND C2 == "x" ) OR \
-#      ( A0 == "x" AND B0 == "x" AND C0 == "x" ) OR \
-#      ( A1 == "x" AND B1 == "x" AND C1 == "x" ) OR \
-#      ( A2 == "x" AND B2 == "x" AND C2 == "x" ) OR \
-#      ( A0 == "x" AND B1 == "x" AND C2 == "x" ) OR \
-#      ( A2 == "x" AND B1 == "x" AND C0 == "x" )
-#    computer_win_condition:
-#      ( A0 == "o" AND A1 == "o" AND A2 == "o" ) OR \
-#      ( B0 == "o" AND B1 == "o" AND B2 == "o" ) OR \
-#      ( C0 == "o" AND C1 == "o" AND C2 == "o" ) OR \
-#      ( A0 == "o" AND B0 == "o" AND C0 == "o" ) OR \
-#      ( A1 == "o" AND B1 == "o" AND C1 == "o" ) OR \
-#      ( A2 == "o" AND B2 == "o" AND C2 == "o" ) OR \
-#      ( A0 == "o" AND B1 == "o" AND C2 == "o" ) OR \
-#      ( A2 == "o" AND B1 == "o" AND C0 == "o" )
+    user_win_condition: ## all 8 possible combinations
+      ( A0 == "x" AND A1 == "x" AND A2 == "x" ) OR \
+      ( B0 == "x" AND B1 == "x" AND B2 == "x" ) OR \
+      ( C0 == "x" AND C1 == "x" AND C2 == "x" ) OR \
+      ( A0 == "x" AND B0 == "x" AND C0 == "x" ) OR \
+      ( A1 == "x" AND B1 == "x" AND C1 == "x" ) OR \
+      ( A2 == "x" AND B2 == "x" AND C2 == "x" ) OR \
+      ( A0 == "x" AND B1 == "x" AND C2 == "x" ) OR \
+      ( A2 == "x" AND B1 == "x" AND C0 == "x" )
+    computer_win_condition:
+      ( A0 == "o" AND A1 == "o" AND A2 == "o" ) OR \
+      ( B0 == "o" AND B1 == "o" AND B2 == "o" ) OR \
+      ( C0 == "o" AND C1 == "o" AND C2 == "o" ) OR \
+      ( A0 == "o" AND B0 == "o" AND C0 == "o" ) OR \
+      ( A1 == "o" AND B1 == "o" AND C1 == "o" ) OR \
+      ( A2 == "o" AND B2 == "o" AND C2 == "o" ) OR \
+      ( A0 == "o" AND B1 == "o" AND C2 == "o" ) OR \
+      ( A2 == "o" AND B1 == "o" AND C0 == "o" )
 
+  # there can be only up to 9 moves, so just code them all
   tasks:
-    # there can be only up to 9 moves, so just code them all
 
     - name: Draw the board
-      debug:
-        msg:
-          - "┌---┬---┬---┬---┐"
-          - "| X | 0 | 1 | 2 |"
-          - "├---┼---┼---┼---┤"
-          - "| A | {{ A0 }} | {{ A1 }} | {{ A2 }} |"
-          - "├---┼---┼---┼---┤"
-          - "| B | {{ B0 }} | {{ B1 }} | {{ B2 }} |"
-          - "├---┼---┼---┼---┤"
-          - "| C | {{ C0 }} | {{ C1 }} | {{ C2 }} |"
-          - "└---┴---┴---┴---┘"
+      import_tasks: draw.yml
 
     - name: Ask user for the first move  # here we should print the names of the fields, which contain a space
       pause:
@@ -73,17 +63,7 @@
         "{{ result.user_input }}": x
 
     - name: Draw the board
-      debug:
-        msg:
-          - "┌---┬---┬---┬---┐"
-          - "| X | 0 | 1 | 2 |"
-          - "├---┼---┼---┼---┤"
-          - "| A | {{ A0 }} | {{ A1 }} | {{ A2 }} |"
-          - "├---┼---┼---┼---┤"
-          - "| B | {{ B0 }} | {{ B1 }} | {{ B2 }} |"
-          - "├---┼---┼---┼---┤"
-          - "| C | {{ C0 }} | {{ C1 }} | {{ C2 }} |"
-          - "└---┴---┴---┴---┘"
+      import_tasks: draw.yml
 
 #    - name: If we lost - congratulate the user and fail the playbook
 #      fail:
@@ -93,17 +73,7 @@
 #    - name: Make our move
 #
     - name: Print the board after our move
-      debug:
-        msg:
-          - "┌---┬---┬---┬---┐"
-          - "| X | 0 | 1 | 2 |"
-          - "├---┼---┼---┼---┤"
-          - "| A | {{ A0 }} | {{ A1 }} | {{ A2 }} |"
-          - "├---┼---┼---┼---┤"
-          - "| B | {{ B0 }} | {{ B1 }} | {{ B2 }} |"
-          - "├---┼---┼---┼---┤"
-          - "| C | {{ C0 }} | {{ C1 }} | {{ C2 }} |"
-          - "└---┴---┴---┴---┘"
+      import_tasks: draw.yml
 
 #    - name: Check whether we have won
 #
