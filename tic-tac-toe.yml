@@ -7,14 +7,6 @@
   hosts: localhost
   connection: local
   gather_facts: false
-#  vars_prompt:
-#    - name: username
-#      prompt: What is your username?
-#      private: no
-#  tasks:
-#    - name: Print a message
-#      ansible.builtin.debug:
-#        msg: 'Logging in as {{ username }}'
   vars:
     A0: " "
     A1: " "
@@ -72,22 +64,14 @@
           - "└---┴---┴---┴---┘"
 
     - name: Ask user for the first move  # here we should print the names of the fields, which contain a space
-      debug:
-        msg: "Make your first move (e.g. B1): "
-
-#    - name: Evaluate user input for correctness
+      pause:
+         prompt: "Make your first move (e.g. B1): "
+      register: result
 
     - name: Set the user selected field to x
       set_fact:
-        B1: 'x'
+        "{{ result.user_input }}": x
 
-#     - name: Set the user selected field to x
-#       set_fact:
-#          {{ item }} == "x"
-#       with_items:
-#         - user_input
-#
-#    - name: Print the board after user input
     - name: Draw the board
       debug:
         msg:
@@ -100,9 +84,7 @@
           - "├---┼---┼---┼---┤"
           - "| C | {{ C0 }} | {{ C1 }} | {{ C2 }} |"
           - "└---┴---┴---┴---┘"
-#
-#    - name: Check if user has won
-#
+
 #    - name: If we lost - congratulate the user and fail the playbook
 #      fail:
 #        msg: "Congratulations, you have won!"
@@ -122,7 +104,7 @@
           - "├---┼---┼---┼---┤"
           - "| C | {{ C0 }} | {{ C1 }} | {{ C2 }} |"
           - "└---┴---┴---┴---┘"
-#
+
 #    - name: Check whether we have won
 #
 #    - name: If we won - wish the user better luck next and quit
