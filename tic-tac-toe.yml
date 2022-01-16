@@ -18,16 +18,26 @@
     C1: " "
     C2: " "
     board_array:
-      - "{{ A0 }}"
-      - "{{ A1 }}"
-      - "{{ A2 }}"
-      - "{{ B0 }}"
-      - "{{ B1 }}"
-      - "{{ B2 }}"
-      - "{{ C0 }}"
-      - "{{ C1 }}"
-      - "{{ C2 }}"
+      - name: A0
+        value: "{{ A0 }}"
+      - name: A1
+        value: "{{ A1 }}"
+      - name: A2
+        value: "{{ A2 }}"
+      - name: B0
+        value: "{{ B0 }}"
+      - name: B1
+        value: "{{ B1 }}"
+      - name: B2
+        value: "{{ B2 }}"
+      - name: C0
+        value: "{{ C0 }}"
+      - name: C1
+        value: "{{ C1 }}"
+      - name: C2
+        value: "{{ C2 }}"
     empty_fields: "{{ board_array | reject('search', ' ') | list }}"
+    available_fields: []
     user_win_condition: ## all 8 possible combinations
       ( A0 == "x" AND A1 == "x" AND A2 == "x" ) OR \
       ( B0 == "x" AND B1 == "x" AND B2 == "x" ) OR \
@@ -53,9 +63,26 @@
     - name: Draw the board
       import_tasks: draw.yml
 
+    - name: Print all possible moves
+      debug:
+        msg: "Possible move: {{ item.name }}"
+      when: item.value == " "
+      loop: "{{ board_array }}"
+
+    - name: Build a list of all the empty fields
+      set_fact:
+        available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
+      when: item.value == " "
+      loop: "{{ board_array }}"
+
+#    - name: Print the list of available moves
+#      debug:
+#        msg: "Available fields are: {{ available_fields | string }}"
+
     - name: Ask user for the first move  # here we should print the names of the fields, which contain a space
       pause:
-         prompt: "Make your first move (e.g. B1): "
+         prompt: "Choose one move from the list {{ available_fields | string }}: "
+         #prompt: "Make your first move (e.g. B1): "
       register: result
 
     - name: Set the user selected field to x
@@ -70,8 +97,16 @@
 #        msg: "Congratulations, you have won!"
 #      when: user_win_condition
 #
-#    - name: Make our move
-#
+    - name: Check which moves are available
+      set_fact:
+        available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
+      when: item.value == " "
+      loop: "{{ board_array }}"
+
+    - name: Make our move
+      set_fact:
+        "{{ available_fields | random }}": o
+
     - name: Print the board after our move
       import_tasks: draw.yml
 
