@@ -1,0 +1,29 @@
+---
+
+- name: Reset the available moves
+  set_fact:
+    available_fields: []
+  no_log: true
+
+- name: Check which moves are available
+  set_fact:
+    available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
+  when: item.value == " "
+  loop: "{{ board_array }}"
+  no_log: true
+
+- name: Draw the board
+  import_tasks: draw.yml
+
+- name: Ask user for the first move  # here we should print the names of the fields, which contain a space
+  pause:
+    prompt: "Make your first move by picking one from the list {{ available_fields | string }}: "
+  register: result
+ 
+- name: Set the user selected field to x
+  set_fact:
+    "{{ result.user_input }}": x
+  no_log: true
+
+- name: Draw the board
+  import_tasks: draw.yml

@@ -1,0 +1,21 @@
+---
+
+- name: Reset array
+  set_fact:
+    available_fields: []
+  no_log: true
+
+- name: Check which moves are available
+  set_fact:
+    available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
+  when: item.value == " "
+  loop: "{{ board_array }}"
+  no_log: true
+
+- name: Make our move
+  set_fact:
+    "{{ available_fields | random }}": o
+  no_log: true
+
+- name: Draw the board
+  import_tasks: draw.yml

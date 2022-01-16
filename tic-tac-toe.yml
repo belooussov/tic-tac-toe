@@ -36,83 +36,79 @@
         value: "{{ C1 }}"
       - name: C2
         value: "{{ C2 }}"
-    empty_fields: "{{ board_array | reject('search', ' ') | list }}"
     available_fields: []
-    user_win_condition: ## all 8 possible combinations
-      ( A0 == "x" AND A1 == "x" AND A2 == "x" ) OR \
-      ( B0 == "x" AND B1 == "x" AND B2 == "x" ) OR \
-      ( C0 == "x" AND C1 == "x" AND C2 == "x" ) OR \
-      ( A0 == "x" AND B0 == "x" AND C0 == "x" ) OR \
-      ( A1 == "x" AND B1 == "x" AND C1 == "x" ) OR \
-      ( A2 == "x" AND B2 == "x" AND C2 == "x" ) OR \
-      ( A0 == "x" AND B1 == "x" AND C2 == "x" ) OR \
-      ( A2 == "x" AND B1 == "x" AND C0 == "x" )
-    computer_win_condition:
-      ( A0 == "o" AND A1 == "o" AND A2 == "o" ) OR \
-      ( B0 == "o" AND B1 == "o" AND B2 == "o" ) OR \
-      ( C0 == "o" AND C1 == "o" AND C2 == "o" ) OR \
-      ( A0 == "o" AND B0 == "o" AND C0 == "o" ) OR \
-      ( A1 == "o" AND B1 == "o" AND C1 == "o" ) OR \
-      ( A2 == "o" AND B2 == "o" AND C2 == "o" ) OR \
-      ( A0 == "o" AND B1 == "o" AND C2 == "o" ) OR \
-      ( A2 == "o" AND B1 == "o" AND C0 == "o" )
+    # all 8 combinations
+    user_win_condition: (A0 == "x" and A1 == "x" and A2 == "x") or
+                        (B0 == "x" and B1 == "x" and B2 == "x") or
+                        (C0 == "x" and C1 == "x" and C2 == "x") or
+                        (A0 == "x" and B0 == "x" and C0 == "x") or
+                        (A1 == "x" and B1 == "x" and C1 == "x") or
+                        (A2 == "x" and B2 == "x" and C2 == "x") or
+                        (A0 == "x" and B1 == "x" and C2 == "x") or
+                        (A2 == "x" and B1 == "x" and C0 == "x")
+    computer_win_condition: ( A0 == "o" and A1 == "o" and A2 == "o" ) or
+                            ( B0 == "o" and B1 == "o" and B2 == "o" ) or
+                            ( C0 == "o" and C1 == "o" and C2 == "o" ) or
+                            ( A0 == "o" and B0 == "o" and C0 == "o" ) or
+                            ( A1 == "o" and B1 == "o" and C1 == "o" ) or
+                            ( A2 == "o" and B2 == "o" and C2 == "o" ) or
+                            ( A0 == "o" and B1 == "o" and C2 == "o" ) or
+                            ( A2 == "o" and B1 == "o" and C0 == "o" )
 
   # there can be only up to 9 moves, so just code them all
   tasks:
+    - name: User makes move 1
+      import_tasks: usermove.yml
 
-    - name: Draw the board
-      import_tasks: draw.yml
+    - name: We make move 2
+      import_tasks: ourmove.yml
 
-    - name: Print all possible moves
+    - name: User makes move 3
+      import_tasks: usermove.yml
+
+    - name: We make move 4
+      import_tasks: ourmove.yml
+
+    - name: User makes move 5
+      import_tasks: usermove.yml
+
+    - name: Check if user has won
+      fail:
+        msg: "Congratulations, you have won!"
+      when: user_win_condition
+
+    - name: We make move 6
+      import_tasks: ourmove.yml
+
+    - name: Check if we have won
+      fail:
+        msg: "Congratulations, you have won!"
+      when: computer_win_condition
+
+    - name: User makes move 7
+      import_tasks: usermove.yml
+
+    - name: Check if user has won
+      fail:
+        msg: "Congratulations, you have won!"
+      when: user_win_condition
+
+    - name: We make move 8
+      import_tasks: ourmove.yml
+
+    - name: Check if we have won
+      fail:
+        msg: "Congratulations, you have won!"
+      when: computer_win_condition
+
+    - name: User makes move 9
+      import_tasks: usermove.yml
+
+    - name: Check if user has won
+      fail:
+        msg: "Congratulations, you have won!"
+      when: user_win_condition
+
+    - name: We run out of moves
       debug:
-        msg: "Possible move: {{ item.name }}"
-      when: item.value == " "
-      loop: "{{ board_array }}"
-
-    - name: Build a list of all the empty fields
-      set_fact:
-        available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
-      when: item.value == " "
-      loop: "{{ board_array }}"
-
-#    - name: Print the list of available moves
-#      debug:
-#        msg: "Available fields are: {{ available_fields | string }}"
-
-    - name: Ask user for the first move  # here we should print the names of the fields, which contain a space
-      pause:
-         prompt: "Choose one move from the list {{ available_fields | string }}: "
-         #prompt: "Make your first move (e.g. B1): "
-      register: result
-
-    - name: Set the user selected field to x
-      set_fact:
-        "{{ result.user_input }}": x
-
-    - name: Draw the board
-      import_tasks: draw.yml
-
-#    - name: If we lost - congratulate the user and fail the playbook
-#      fail:
-#        msg: "Congratulations, you have won!"
-#      when: user_win_condition
-#
-    - name: Check which moves are available
-      set_fact:
-        available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
-      when: item.value == " "
-      loop: "{{ board_array }}"
-
-    - name: Make our move
-      set_fact:
-        "{{ available_fields | random }}": o
-
-    - name: Print the board after our move
-      import_tasks: draw.yml
-
-#    - name: Check whether we have won
-#
-#    - name: If we won - wish the user better luck next and quit
-#      debug:
-#        msg: "Better luck next time!"
-#      when: computer_win_condition
+        msg: "No more moves left!"
