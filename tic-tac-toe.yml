@@ -8,6 +8,7 @@
   connection: local
   gather_facts: false
   vars:
+    available_fields: []
     A0: " "
     A1: " "
     A2: " "
@@ -36,24 +37,6 @@
         value: "{{ C1 }}"
       - name: C2
         value: "{{ C2 }}"
-    available_fields: []
-    # all 8 combinations
-    user_win_condition: (A0 == "x" and A1 == "x" and A2 == "x") or
-                        (B0 == "x" and B1 == "x" and B2 == "x") or
-                        (C0 == "x" and C1 == "x" and C2 == "x") or
-                        (A0 == "x" and B0 == "x" and C0 == "x") or
-                        (A1 == "x" and B1 == "x" and C1 == "x") or
-                        (A2 == "x" and B2 == "x" and C2 == "x") or
-                        (A0 == "x" and B1 == "x" and C2 == "x") or
-                        (A2 == "x" and B1 == "x" and C0 == "x")
-    computer_win_condition: ( A0 == "o" and A1 == "o" and A2 == "o" ) or
-                            ( B0 == "o" and B1 == "o" and B2 == "o" ) or
-                            ( C0 == "o" and C1 == "o" and C2 == "o" ) or
-                            ( A0 == "o" and B0 == "o" and C0 == "o" ) or
-                            ( A1 == "o" and B1 == "o" and C1 == "o" ) or
-                            ( A2 == "o" and B2 == "o" and C2 == "o" ) or
-                            ( A0 == "o" and B1 == "o" and C2 == "o" ) or
-                            ( A2 == "o" and B1 == "o" and C0 == "o" )
 
   # there can be only up to 9 moves, so just code them all
   tasks:
@@ -72,42 +55,17 @@
     - name: User makes move 5
       import_tasks: usermove.yml
 
-    - name: Check if user has won
-      fail:
-        msg: "Congratulations, you have won!"
-      when: user_win_condition
-
     - name: We make move 6
       import_tasks: ourmove.yml
-
-    - name: Check if we have won
-      fail:
-        msg: "Congratulations, you have won!"
-      when: computer_win_condition
 
     - name: User makes move 7
       import_tasks: usermove.yml
 
-    - name: Check if user has won
-      fail:
-        msg: "Congratulations, you have won!"
-      when: user_win_condition
-
     - name: We make move 8
       import_tasks: ourmove.yml
 
-    - name: Check if we have won
-      fail:
-        msg: "Congratulations, you have won!"
-      when: computer_win_condition
-
     - name: User makes move 9
       import_tasks: usermove.yml
-
-    - name: Check if user has won
-      fail:
-        msg: "Congratulations, you have won!"
-      when: user_win_condition
 
     - name: We run out of moves
       debug:
