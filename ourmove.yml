@@ -20,42 +20,15 @@
 - name: Draw the board
   import_tasks: draw.yml
 
-- name: Check if we have won A
+- name: Check if we have won
   fail:
     msg: "Better luck next time!"
-  when: A0 == 'o' and A1 == 'o' and A2 == 'o'
-
-- name: Check if we have won B
-  fail:
-    msg: "Better luck next time!"
-  when: B0 == 'o' and B1 == 'o' and B2 == 'o'
-
-- name: Check if we have won C
-  fail:
-    msg: "Better luck next time!"
-  when: C0 == 'o' and C1 == 'o' and C2 == 'o'
-
-- name: Check if we have won D
-  fail:
-    msg: "Better luck next time!"
-  when: A0 == 'o' and B0 == 'o' and C0 == 'o'
-
-- name: Check if we have won E
-  fail:
-    msg: "Better luck next time!"
-  when: A1 == 'o' and B1 == 'o' and C1 == 'o'
-
-- name: Check if we have won F
-  fail:
-    msg: "Better luck next time!"
-  when: A2 == 'o' and B2 == 'o' and C2 == 'o'
-
-- name: Check if we have won G
-  fail:
-    msg: "Better luck next time!"
-  when: A0 == 'o' and B1 == 'o' and C2 == 'o'
-
-- name: Check if we have won H
-  fail:
-    msg: "Better luck next time!"
-  when: A2 == 'o' and B1 == 'o' and C0 == 'o'
+  when:
+    - "( A0 == 'o' and A1 == 'o' and A2 == 'o' ) or \
+       ( B0 == 'o' and B1 == 'o' and B2 == 'o' ) or \
+       ( C0 == 'o' and C1 == 'o' and C2 == 'o' ) or \
+       ( A0 == 'o' and B0 == 'o' and C0 == 'o' ) or \
+       ( A1 == 'o' and B1 == 'o' and C1 == 'o' ) or \
+       ( A2 == 'o' and B2 == 'o' and C2 == 'o' ) or \
+       ( A0 == 'o' and B1 == 'o' and C2 == 'o' ) or \
+       ( A2 == 'o' and B1 == 'o' and C0 == 'o' )"

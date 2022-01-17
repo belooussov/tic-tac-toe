@@ -17,7 +17,7 @@
 
 - name: Ask user for the move
   pause:
-    prompt: "Make your first move by picking one from the list {{ available_fields | string }}: "
+    prompt: "Select your move from the list {{ available_fields | string }}: "
   register: result
   until: result.user_input in available_fields
 
@@ -29,42 +29,15 @@
 - name: Draw the board
   import_tasks: draw.yml
 
-- name: Check if user has won A
+- name: Check if user has won
   fail:
     msg: "Congratulations, you have won!"
-  when: A0 == 'x' and A1 == 'x' and A2 == 'x'
-
-- name: Check if user has won B
-  fail:
-    msg: "Congratulations, you have won!"
-  when: B0 == 'x' and B1 == 'x' and B2 == 'x'
-
-- name: Check if user has won C
-  fail:
-    msg: "Congratulations, you have won!"
-  when: C0 == 'x' and C1 == 'x' and C2 == 'x'
-
-- name: Check if user has won D
-  fail:
-    msg: "Congratulations, you have won!"
-  when: A0 == 'x' and B0 == 'x' and C0 == 'x'
-
-- name: Check if user has won E
-  fail:
-    msg: "Congratulations, you have won!"
-  when: A1 == 'x' and B1 == 'x' and C1 == 'x'
-
-- name: Check if user has won F
-  fail:
-    msg: "Congratulations, you have won!"
-  when: A2 == 'x' and B2 == 'x' and C2 == 'x'
-
-- name: Check if user has won G
-  fail:
-    msg: "Congratulations, you have won!"
-  when: A0 == 'x' and B1 == 'x' and C2 == 'x'
-
-- name: Check if user has won H
-  fail:
-    msg: "Congratulations, you have won!"
-  when: A2 == 'x' and B1 == 'x' and C0 == 'x'
+  when:
+    - "( A0 == 'x' and A1 == 'x' and A2 == 'x' ) or \
+       ( B0 == 'x' and B1 == 'x' and B2 == 'x' ) or \
+       ( C0 == 'x' and C1 == 'x' and C2 == 'x' ) or \
+       ( A0 == 'x' and B0 == 'x' and C0 == 'x' ) or \
+       ( A1 == 'x' and B1 == 'x' and C1 == 'x' ) or \
+       ( A2 == 'x' and B2 == 'x' and C2 == 'x' ) or \
+       ( A0 == 'x' and B1 == 'x' and C2 == 'x' ) or \
+       ( A2 == 'x' and B1 == 'x' and C0 == 'x' )"
