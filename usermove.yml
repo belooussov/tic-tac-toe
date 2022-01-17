@@ -15,17 +15,16 @@
 - name: Draw the board
   import_tasks: draw.yml
 
-# need a loop for validating the user input
 - name: Ask user for the move
   pause:
     prompt: "Make your first move by picking one from the list {{ available_fields | string }}: "
   register: result
+  until: result.user_input in available_fields
 
 - name: Set the user selected field to x
   set_fact:
     "{{ result.user_input }}": x
   no_log: true
-#  when: result.user_input in available_fields
 
 - name: Draw the board
   import_tasks: draw.yml
