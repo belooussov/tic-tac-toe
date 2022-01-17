@@ -7,7 +7,7 @@
 
 - name: Check which moves are available
   set_fact:
-    available_fields: "{{ available_fields }} + [ '{{ item.name }}' ]"
+    available_fields: "{{ available_fields + [item.name] }}"
   when: item.value == " "
   loop: "{{ board_array }}"
   no_log: true
