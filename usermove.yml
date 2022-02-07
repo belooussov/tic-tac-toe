@@ -15,9 +15,9 @@
 - name: Draw the board
   import_tasks: draw.yml
 
-- name: Ask user for the move
+- name: Ask the user for a move
   pause:
-    prompt: "Select your move from the list {{ available_fields | string }}: "
+    prompt: "Please select a move from the list: {{ available_fields | string }}: "
   register: result
   until: result.user_input in available_fields
 
