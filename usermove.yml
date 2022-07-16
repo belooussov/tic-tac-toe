@@ -30,8 +30,20 @@
   import_tasks: draw.yml
 
 - name: Check if user has won
-  fail:
+  debug:
     msg: "Congratulations, you have won!"
+  when:
+    - "( A0 == 'x' and A1 == 'x' and A2 == 'x' ) or \
+       ( B0 == 'x' and B1 == 'x' and B2 == 'x' ) or \
+       ( C0 == 'x' and C1 == 'x' and C2 == 'x' ) or \
+       ( A0 == 'x' and B0 == 'x' and C0 == 'x' ) or \
+       ( A1 == 'x' and B1 == 'x' and C1 == 'x' ) or \
+       ( A2 == 'x' and B2 == 'x' and C2 == 'x' ) or \
+       ( A0 == 'x' and B1 == 'x' and C2 == 'x' ) or \
+       ( A2 == 'x' and B1 == 'x' and C0 == 'x' )"
+
+- name: End play
+  meta: end_play
   when:
     - "( A0 == 'x' and A1 == 'x' and A2 == 'x' ) or \
        ( B0 == 'x' and B1 == 'x' and B2 == 'x' ) or \

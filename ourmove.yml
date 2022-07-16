@@ -20,9 +20,21 @@
 - name: Draw the board
   import_tasks: draw.yml
 
-- name: Check if we have won
-  fail:
+- name: Check if computer has won
+  debug:
     msg: "Better luck next time!"
+  when:
+    - "( A0 == 'o' and A1 == 'o' and A2 == 'o' ) or \
+       ( B0 == 'o' and B1 == 'o' and B2 == 'o' ) or \
+       ( C0 == 'o' and C1 == 'o' and C2 == 'o' ) or \
+       ( A0 == 'o' and B0 == 'o' and C0 == 'o' ) or \
+       ( A1 == 'o' and B1 == 'o' and C1 == 'o' ) or \
+       ( A2 == 'o' and B2 == 'o' and C2 == 'o' ) or \
+       ( A0 == 'o' and B1 == 'o' and C2 == 'o' ) or \
+       ( A2 == 'o' and B1 == 'o' and C0 == 'o' )"
+
+- name: End play
+  meta: end_play
   when:
     - "( A0 == 'o' and A1 == 'o' and A2 == 'o' ) or \
        ( B0 == 'o' and B1 == 'o' and B2 == 'o' ) or \
